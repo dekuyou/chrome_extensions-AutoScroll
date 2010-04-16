@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>Auto Scroll</title>
+
+<script>
+
+chrome.extension.getVersion = function() { 
+  if (!chrome.extension.version_) { 
+    var xhr = new XMLHttpRequest(); 
+    xhr.open("GET", chrome.extension.getURL('manifest.json'), false); 
+    xhr.onreadystatechange = function() { 
+      if (this.readyState == 4) { 
+        var manifest = JSON.parse(this.responseText); 
+        chrome.extension.version_ = manifest.version; 
+      } 
+   }; 
+   xhr.send(); 
+ } 
+ return chrome.extension.version_; 
+}
+
+
+window.addEventListener('load', function(e) {
+	var old_ver = ( localStorage["version"] || "" ).split(".");
+	var new_ver = (chrome.extension.getVersion() + "").split(".");
+	
+	if(old_ver[0]+'.'+old_ver[1]+'.'+old_ver[2] != new_ver[0]+'.'+new_ver[1]+'.'+new_ver[2]){
+		chrome.tabs.getAllInWindow(undefined, function(tabs) {
+			for (var i = 0, tab; tab = tabs[i]; i++) {
+				var str = tab.url;
+				if (str.match('dekuyou.ddo.jp/knowledge/')) { 
+					chrome.tabs.update(tab.id, {selected: true});
+					return;
+				}
+			}
+			chrome.tabs.create({url:'http://dekuyou.ddo.jp/knowledge/?chrome/extensions'});
+		});
+		
+		localStorage["version"] = chrome.extension.getVersion();
+		
+		// 255, 0, 0 red
+		chrome.browserAction.setBadgeText({text:"new!"});
+		chrome.browserAction.setBadgeBackgroundColor({color:[0,255,255, 255]});
+		
+	}
+}, false);
+
+
+
+var i = 0;
+
+function doScrollSlow(tab) {
+  chrome.browserAction.setBadgeText({text:"1"});
+  var upUrl = "javascript:var wN2scRl;Sa5gNA9k=new Function('clearTimeout(wN2scRl)');document.onkeydown=Sa5gNA9k;Sa5gNA9k();void(wN2scRl=setInterval('if(pageYOffset<document.height-innerHeight){window.scrollBy(0,1)}else{Sa5gNA9k()}',50))";
+  if(upUrl != tab.url) {
+    chrome.tabs.update(tab.id, {'url': upUrl});
+  }
+}
+
+function doScrollHigh1(tab) {
+  chrome.browserAction.setBadgeText({text:"2"});
+  var upUrl = "javascript:var wN2scRl;Sa5gNA9k=new Function('clearTimeout(wN2scRl)');document.onkeydown=Sa5gNA9k;Sa5gNA9k();void(wN2scRl=setInterval('if(pageYOffset<document.height-innerHeight){window.scrollBy(0,4)}else{Sa5gNA9k()}',50))";
+  if(upUrl != tab.url) {
+    chrome.tabs.update(tab.id, {'url': upUrl});
+  }
+}
+function doScrollHigh2(tab) {
+  chrome.browserAction.setBadgeText({text:"3"});
+  var upUrl = "javascript:var wN2scRl;Sa5gNA9k=new Function('clearTimeout(wN2scRl)');document.onkeydown=Sa5gNA9k;Sa5gNA9k();void(wN2scRl=setInterval('if(pageYOffset<document.height-innerHeight){window.scrollBy(0,10)}else{Sa5gNA9k()}',50))";
+  if(upUrl != tab.url) {
+    chrome.tabs.update(tab.id, {'url': upUrl});
+  }
+}
+
+function doStop(tab) {
+  chrome.browserAction.setBadgeText({text:""});
+  var upUrl = "javascript:var wN2scRl;Sa5gNA9k=new Function('clearTimeout(wN2scRl)');document.onkeydown=Sa5gNA9k;Sa5gNA9k();void(wN2scRl=setInterval('if(pageYOffset<document.height-innerHeight){window.scrollBy(0,0)}else{Sa5gNA9k()}',50))";
+  if(upUrl != tab.url) {
+    chrome.tabs.update(tab.id, {'url': upUrl});
+  }
+}
+
+chrome.extension.onRequest.addListener(
+	function(request, sender, sendResponse) {
+
+		chrome.tabs.getSelected(null, function(tab){
+			doStop(tab);
+		});
+	i = 0;
+	sendResponse();
+}); 
+
+function doPageStop(){
+
+
+}
+
+
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+	chrome.browserAction.setBadgeBackgroundColor({color:[255,0,0, 255]});
+
+  if(i == 0){
+	i +=1;
+	doScrollSlow(tab);
+  }else if(i == 1){
+	i +=1;
+	doScrollHigh1(tab);
+  }else if(i == 2){
+	i +=1;
+	doScrollHigh2(tab);
+  }else if(i == 3){
+	i = 0;
+	doStop(tab);
+  }  
+});
+ 
+
+
+
+</script>
+
+</head>
+<body >
+
+
+</body> 
+</html>
