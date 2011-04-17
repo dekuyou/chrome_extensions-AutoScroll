@@ -84,11 +84,14 @@ function doStop(tab) {
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 
+	if(i != 0){
 		chrome.tabs.getSelected(null, function(tab){
 		  clearInterval(wN2scRl);
 			doStop(tab);
 		});
-	i = 0;
+		
+		i = 0;
+	}
 	sendResponse();
 }); 
 

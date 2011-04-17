@@ -1,6 +1,6 @@
 {
   "name": "Auto Scroll",
-  "version": "0.1.1.0",
+  "version": "0.1.1.1",
   "description": "Auto Scroll. Google Reader works!",
     "icons": { "48": "autoscroll.png",
           "128": "autoscroll.png" },
