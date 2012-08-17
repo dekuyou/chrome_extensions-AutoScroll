@@ -1,14 +1,21 @@
 {
+  "manifest_version": 2,
   "name": "Auto Scroll",
-  "version": "0.1.1.3",
+  "version": "0.2.1",
   "description": "Auto Scroll. Google Reader works!",
     "icons": { "48": "autoscroll.png",
           "128": "autoscroll.png" },
-  "background_page": "background.html",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "background": {
+    "page": "background.html"
+  },
+  "options_page": "options.html",
   "browser_action": {
     "default_title": "",
     "default_icon": "autoscroll.png"
- },
+  },
   "permissions": [ "tabs","http://*/*","https://*/*"],
    "content_scripts": [
     {
