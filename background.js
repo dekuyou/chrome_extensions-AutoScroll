@@ -49,8 +49,8 @@ function doScroll(tab, speed, badge) {
   chrome.browserAction.setBadgeText({text:badge});
 
   wN2scRl = setInterval(function(){
-		upurl(tab.id);
-	}, speed);
+  	upurl(tab.id);
+  }, speed);
   
   // var upUrl = "javascript:var wN2scRl;Sa5gNA9k=new Function('clearTimeout(wN2scRl)');document.onkeydown=Sa5gNA9k;Sa5gNA9k();void(wN2scRl=setInterval('if(pageYOffset<document.height-innerHeight){window.scrollBy(0,1)}else{Sa5gNA9k()}',"+speed+"))";
   // if(upUrl != tab.url) {
@@ -64,7 +64,9 @@ function upurl(id){
 function doScrollGoogleReader(tab, speed, badge) {
   chrome.browserAction.setBadgeText({text:badge});
 
-    wN2scRl = setInterval('upurlg('+tab.id+');', speed);
+    wN2scRl = setInterval(function(){
+		upurlg(tab.id);
+	}, speed);
 
 	
 }
@@ -119,23 +121,23 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   if(i == 0){
 	i +=1;
 	if(checkloginpage >=0 ){
-		doScrollGoogleReader(tab, 50, '1');
+		doScrollGoogleReader(tab, (localStorage["low"] || "50"), 'LOW');
 	}else{
-		doScroll(tab, 50, '1');
+		doScroll(tab, (localStorage["low"] || "50"), 'LOW');
 	}
   }else if(i == 1){
 	i +=1;
 	if(checkloginpage >=0 ){
-		doScrollGoogleReader(tab, 15, '2');
+		doScrollGoogleReader(tab, (localStorage["second"] || "15"), 'STD');
 	}else{
-		doScroll(tab, 15, '2');
+		doScroll(tab, (localStorage["second"] || "15"), 'STD');
 	}
   }else if(i == 2){
 	i +=1;
 	if(checkloginpage >=0 ){
-		doScrollGoogleReader(tab, 1, '3');
+		doScrollGoogleReader(tab, (localStorage["top"] || "1"), 'TOP');
 	}else{
-		doScroll(tab, 1, '3');
+		doScroll(tab, (localStorage["top"] || "1"), 'TOP');
 	}
   }else if(i == 3){
 	i = 0;
@@ -154,5 +156,3 @@ chrome.tabs.onSelectionChanged.addListener(function(tabid, selectinfo) {
 	
 
 });
-
-
